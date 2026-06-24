@@ -34,7 +34,7 @@ echo "==> Restoring hardware configuration..."
 sudo cp /tmp/hardware-configuration.nix /etc/nixos/hardware-configuration.nix
 
 echo "==> Rebuilding system..."
-sudo nixos-rebuild switch --flake /etc/nixos#Ivalice --impure
+sudo nixos-rebuild switch --flake /etc/nixos#Ivalice
 
 echo "==> Cleaning up..."
 # $0 is 'bash' when piped via curl, so only remove if it's an actual file path

@@ -206,7 +206,6 @@
      ll = "eza -l --icons";
      la = "eza -a --icons";
      lla = "eza -la --icons";
-     rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#Ivalice --impure";
   };
 
   # Screenshare Portals
