@@ -108,6 +108,7 @@
     isNormalUser = true;
     description = username;
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.fish;
   };
 
  ############ Unfree Packages and Experimental Features ##############
@@ -170,6 +171,9 @@
  
  ############# Configurations #############
 
+  # Fish Shell
+  programs.fish.enable = true;
+
   # Steam Configuration
   programs.steam = {
     enable = true;
@@ -214,9 +218,6 @@
     xdgOpenUsePortal = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
-
-  # Animated Fetch on Terminal Open
-  programs.bash.interactiveShellInit = ''fetch'';
 
   # Automatic Store Optimization
   nix.settings.auto-optimise-store = true;

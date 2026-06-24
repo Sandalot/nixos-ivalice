@@ -1,9 +1,10 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, lib, username, ... }:
   {
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
   programs.home-manager.enable = true;
+  home.sessionPath = [ "$HOME/.local/bin" ];
   
   # Run dms setup on first boot
   systemd.user.services.dms-first-boot = {
@@ -223,6 +224,58 @@
   include "dms/outputs.kdl"
   include "dms/cursor.kdl"
 '';
+  
+  # Enable Fish Shell Management
+  programs.fish = {
+  enable = true;
+  interactiveShellInit = ''
+    /run/current-system/sw/bin/fetch
+    set fish_greeting ""
+    echo -e "\033[5 q"
+    '';
+  };
+
+  # Enable Starship
+  programs.starship = {
+  enable = true;
+  settings = {
+    format = "$hostname$time$directory$git_branch$git_status$character";
+    
+    hostname = {
+      ssh_only = false;
+      format = "[$hostname]($style) | ";
+      style = "bold white";
+    };
+    time = {
+      disabled = false;
+      format = "[$time]($style) ❭ ";
+      time_format = "%H:%M";
+      style = "dimmed white";
+    };
+
+    directory = {
+      format = "[$path]($style) ";
+      style = "purple";
+      truncation_length = 2;
+      truncate_to_repo = true;
+    };
+
+    git_branch = {
+      format = "❭ [ $branch]($style) ";
+      style = "blue";
+    };
+
+    git_status = {
+      format = "[$all_status$ahead_behind]($style)";
+      style = "green";
+    };
+
+    character = {
+      success_symbol = "\n[❯](bold purple)";
+      error_symbol = "\n[❯](bold red)";
+        };
+      };
+    };
 
   # Aerofyl Fetch
   home.file.".config/fetch/config".text = ''
@@ -242,9 +295,9 @@
     memory
   '';
  
- # Fastfetch
- home.file.".config/fastfetch/config.jsonc".text = ''
-  {
+  # Fastfetch
+  home.file.".config/fastfetch/config.jsonc".text = ''
+   {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
     "logo": {
       "source": "nixos_small",
