@@ -41,4 +41,5 @@ After installing, don't forget to change your wallpaper in DMS settings to trigg
 - Flakes enabled
 
 ## Notes
-This install script **DOES NOT INCLUDE** graphical drivers as I am on an AMD system. You have to provide your own drivers if you use an NVIDIA system.
+- This install script **DOES NOT INCLUDE** graphical drivers as I am on an AMD system. You have to provide your own drivers if you use an NVIDIA system.
+- This install script includes auto-mounts for my personal drives, remove this as needed or edit them as needed.
