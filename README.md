@@ -39,3 +39,6 @@ After installing, don't forget to change your wallpaper in DMS settings to trigg
 - Garbage collection every 3 days
 - Home Manager for declarative dotfile management
 - Flakes enabled
+
+## Notes
+This install script **DOES NOT INCLUDE** graphical drivers as I am on an AMD system. You have to provide your own drivers if you use an NVIDIA system.
