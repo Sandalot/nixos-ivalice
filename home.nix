@@ -1,14 +1,26 @@
-{ config, pkgs, ... }:
-  let
-    # Change username here
-    username = "keio";
-  in
-{
+{ config, pkgs, username, ... }:
+  {
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "26.05";
   programs.home-manager.enable = true;
-
+  
+  # Run dms setup on first boot
+  systemd.user.services.dms-first-boot = {
+  Unit = {
+    Description = "DMS first boot setup";
+    After = [ "graphical-session.target" ];
+    ConditionPathExists = "!%h/.config/DankMaterialShell/settings.json";
+  };
+  Service = {
+    Type = "oneshot";
+    ExecStart = "dms setup";
+    RemainAfterExit = true;
+  };
+  Install = {
+    WantedBy = [ "graphical-session.target" ];
+  };
+}; 
   
   # Niri (DMS manages its own dms/ subdirectory)
   home.file.".config/niri/config.kdl".text = ''
@@ -255,10 +267,10 @@
   [window]
   decorations = "None"
   padding = { x = 12, y = 12 }
-  opacity = 1.0
+  # opacity is moved to window rules
 
   [scrolling]
-  history = 3023
+  history = 5000
 
   [cursor]
   style = { shape = "Beam", blinking = "On" }

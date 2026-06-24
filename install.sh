@@ -3,6 +3,9 @@ set -e
 
 REPO="https://github.com/Keiyoko/nixos-ivalice"
 
+# Print a clear recovery message if anything fails mid-install
+trap 'echo ""; echo "ERROR: Installation failed. Your hardware config is at /tmp/hardware-configuration.nix"; echo "To recover: sudo mkdir -p /etc/nixos && sudo cp /tmp/hardware-configuration.nix /etc/nixos/"' ERR
+
 if [ ! -f /etc/nixos/hardware-configuration.nix ]; then
   echo "ERROR: /etc/nixos/hardware-configuration.nix not found. Are you on an installed NixOS system?"
   exit 1
@@ -15,7 +18,17 @@ echo "==> Clearing /etc/nixos..."
 sudo rm -rf /etc/nixos
 
 echo "==> Cloning nixos-ivalice..."
-nix-shell -p git --run "sudo git clone $REPO /etc/nixos"
+nix-shell -p git --run "sudo git clone $REPO /etc/nixos" || {
+  echo "ERROR: Clone failed. Restoring hardware config..."
+  sudo mkdir -p /etc/nixos
+  sudo cp /tmp/hardware-configuration.nix /etc/nixos/
+  exit 1
+}
+
+echo "==> Verifying clone..."
+for f in flake.nix configuration.nix home.nix; do
+  [ -f "/etc/nixos/$f" ] || { echo "ERROR: Expected /etc/nixos/$f not found after clone."; exit 1; }
+done
 
 echo "==> Restoring hardware configuration..."
 sudo cp /tmp/hardware-configuration.nix /etc/nixos/hardware-configuration.nix
@@ -24,8 +37,8 @@ echo "==> Rebuilding system..."
 sudo nixos-rebuild switch --flake /etc/nixos#Ivalice
 
 echo "==> Cleaning up..."
-sudo rm -- "$0"
-sudo rm -f -- "$(dirname "$0")/README.md"
+[ -f "$0" ] && sudo rm -- "$0"
+[ -f "$(dirname "$0")/README.md" ] && sudo rm -f -- "$(dirname "$0")/README.md"
 
 echo ""
 echo "Done! Remember to update drive UUIDs in configuration.nix after booting."

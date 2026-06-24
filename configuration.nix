@@ -1,8 +1,4 @@
-{config, pkgs, inputs, ... }:
-let
-  # Change username here
-  username = "keio";
-in
+{config, pkgs, inputs, username, ... }:
 {
  ################# System Version #################
 
@@ -15,7 +11,7 @@ in
       ./hardware-configuration.nix
     ];
 
- ################# Drive Mounts ##################
+################ Drive Mounts (Change these out if needed) ################# 
 
  # Drive 1 Mount
  fileSystems."/mnt/Marche" = {
@@ -72,19 +68,6 @@ in
   
   # Disable Watchdog in Kernel
   boot.kernelParams = [ "nowatchdog" ];
-
-  # Systemd service to run dms setup on first boot
-  systemd.user.services.dms-first-boot = {
-  description = "DMS first boot setup";
-  wantedBy = [ "graphical-session.target" ];
-  after = [ "graphical-session.target" ];
-  unitConfig.ConditionPathExists = "!/home/${username}/.config/DankMaterialShell/settings.json";
-  serviceConfig = {
-    Type = "oneshot";
-    ExecStart = "${pkgs.dms}/bin/dms setup";
-    RemainAfterExit = true;
-  };
-};
 
  ########## System Definitions ############
 
@@ -200,7 +183,7 @@ in
   programs.gamemode.enable = true;
 
  
-  # Whitelist Electrons
+  # Whitelist Electron needed by Equibop
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
@@ -228,6 +211,7 @@ in
   # Screenshare Portals
   xdg.portal = {
     enable = true;
+    xdgOpenUsePortal = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
   };
 
@@ -238,7 +222,7 @@ in
   nix.settings.auto-optimise-store = true;
   nix.gc = {
     automatic = true;
-    dates = "*-*-01,04,07,10,13,16,19,22,25,28,31";
+    dates = "*-*-*/3";
     options = "--delete-older-than 3d";
   };
 
