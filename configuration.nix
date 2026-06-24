@@ -221,9 +221,10 @@
   # Automatic Store Optimization
   nix.settings.auto-optimise-store = true;
   nix.gc = {
-    automatic = true;
-    dates = "*-*-*/3";
-    options = "--delete-older-than 3d";
+  automatic = true;
+  dates = "weekly";
+  persistent = true;
+  options = "--delete-older-than 7d";
   };
 
  ########### Hardware Configurations ############
