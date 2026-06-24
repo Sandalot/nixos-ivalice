@@ -47,7 +47,7 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
 
 **System**
 - Automatic Nix store optimization
-- Garbage collection every 3 days
+- Garbage collection every 7 days
 - Home Manager for declarative dotfile management
 - Flakes enabled
 
