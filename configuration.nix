@@ -1,87 +1,69 @@
-{config, pkgs, inputs, username, ... }:
+{ config, pkgs, inputs, username, ... }:
 {
- ################# System Version #################
+  ################# System Version #################
 
- system.stateVersion = "26.05";
+  system.stateVersion = "26.05";
 
- ################ Imports #################
+  ################ Imports #################
 
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
-################ Drive Mounts (Change these out if needed) ################# 
+  ################ Drive Mounts #################
 
- # Drive 1 Mount
- fileSystems."/mnt/Marche" = {
-   device = "/dev/disk/by-uuid/1720a584-66b6-4fa3-beca-1c977ba37f1f";
-   fsType = "ext4";
-   options = [
-     "defaults"
-     "nofail"
-     "x-gvfs-show"
-   ];
- };
+  # Drive 1 Mount
+  fileSystems."/mnt/Marche" = {
+    device = "/dev/disk/by-uuid/1720a584-66b6-4fa3-beca-1c977ba37f1f";
+    fsType = "ext4";
+    options = [ "defaults" "nofail" "x-gvfs-show" ];
+  };
 
- # Drive 2 Mount
- fileSystems."/mnt/Ritz" = {
-   device = "/dev/disk/by-uuid/40170e14-94ff-44f5-a5c7-5fda8af305c5";
-   fsType = "ext4";
-   options = [
-     "defaults"
-     "nofail"
-     "x-gvfs-show"
-   ];
- };
+  # Drive 2 Mount
+  fileSystems."/mnt/Ritz" = {
+    device = "/dev/disk/by-uuid/40170e14-94ff-44f5-a5c7-5fda8af305c5";
+    fsType = "ext4";
+    options = [ "defaults" "nofail" "x-gvfs-show" ];
+  };
 
- ################# Display Configuration ##############
+  ################# Display Configuration #################
 
- # Window Manager
- programs.niri.enable = true;
+  # Window Manager
+  programs.niri.enable = true;
 
- # DMS Shell Configuration
- programs.dms-shell = {
-  enable = true;
-  systemd = {
+  # DMS Shell Configuration
+  programs.dms-shell = {
     enable = true;
-    restartIfChanged = true;
- };
+    systemd = {
+      enable = true;
+      restartIfChanged = true;
+    };
+    enableSystemMonitoring = true;
+    enableDynamicTheming = true;
+  };
 
-  enableSystemMonitoring = true;
-  enableDynamicTheming = true;
- };
+  # Font Packages
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.symbols-only
+    nerd-fonts.iosevka
+  ];
 
- # Font Packages
- fonts.packages = with pkgs; [
-   nerd-fonts.fira-code
-   nerd-fonts.jetbrains-mono
-   nerd-fonts.symbols-only
-   nerd-fonts.iosevka
- ];
+  ################ Bootloader #################
 
- ################ Bootloader ##############
-
-  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
-  # Disable Watchdog in Kernel
   boot.kernelParams = [ "nowatchdog" ];
 
- ########## System Definitions ############
+  ########## System Definitions #################
 
-  networking.hostName = "Ivalice"; # Define your hostname.
-
-  # Enable networking
+  networking.hostName = "Ivalice";
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Asia/Singapore";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_SG.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_SG.UTF-8";
@@ -94,16 +76,13 @@
     LC_TIME = "en_SG.UTF-8";
   };
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Enable GVFS for Nautilus
   services.gvfs.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${username} = {
     isNormalUser = true;
     description = username;
@@ -111,116 +90,106 @@
     shell = pkgs.fish;
   };
 
- ############ Unfree Packages and Experimental Features ##############
+  ############ Unfree Packages and Experimental Features #################
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # Enable Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
- ############# Packages ####################
+  ############# Packages #################
 
   environment.systemPackages = with pkgs; [
-  
-  # Zen Browser Flake
-  (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default)
 
-  # System Critical Packages
-  neovim
-  eza
-  git
-  alacritty
-  nautilus
-  bitwarden-desktop
-  xwayland-satellite
-  wl-clipboard
+    # Zen Browser Flake
+    (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default)
 
-  # Animated Fetch
-  fastfetch
-  (stdenv.mkDerivation {
-  pname = "areofyl-fetch";
-  version = "unstable";
-  src = inputs.areofyl-fetch;
-  nativeBuildInputs = [ gcc ];
-  buildPhase = ''
-    sed -i 's/#define ANIM_WIDTH 60/#define ANIM_WIDTH 45/' fetch.c
-    sed -i 's/#define GAP 2/#define GAP 1/' fetch.c
-    cc -O2 -o fetch fetch.c -lm
-  '';
-  installPhase = "install -Dm755 fetch $out/bin/fetch";
-  })
+    # System Critical Packages
+    neovim
+    eza
+    git
+    alacritty
+    nautilus
+    bitwarden-desktop
+    xwayland-satellite
+    wl-clipboard
 
-  # Audio Packages
-  qpwgraph
-  pavucontrol
+    # Animated Fetch
+    fastfetch
+    (stdenv.mkDerivation {
+      pname = "areofyl-fetch";
+      version = "unstable";
+      src = inputs.areofyl-fetch;
+      nativeBuildInputs = [ gcc ];
+      buildPhase = ''
+        sed -i 's/#define ANIM_WIDTH 60/#define ANIM_WIDTH 45/' fetch.c
+        sed -i 's/#define GAP 2/#define GAP 1/' fetch.c
+        cc -O2 -o fetch fetch.c -lm
+      '';
+      installPhase = "install -Dm755 fetch $out/bin/fetch";
+    })
 
-  # Icon Packages
-  quintom-cursor-theme
+    # Audio Packages
+    qpwgraph
+    pavucontrol
 
-  # Other Packages
-  equibop
-  materialgram
-  spotify
+    # Icon Packages
+    quintom-cursor-theme
 
-  # Hardware Packages
-  oversteer
+    # Other Packages
+    equibop
+    materialgram
+    spotify
+
+    # Hardware Packages
+    oversteer
   ];
- 
- ############# Configurations #############
+
+  ############# Configurations #################
 
   # Fish Shell
   programs.fish.enable = true;
 
-  
-  # Steam Configuration
+  # Steam
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
   };
-  
-  # Game Optimizations
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
- 
   # Whitelist Electron needed by Equibop
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
- 
- ######### Display Manager ###########
- 
-  # DMS Greeter
+
+  ######### Display Manager #################
+
   services.displayManager.dms-greeter = {
-   enable = true;
-   compositor = {name = "niri"; };
-   configHome = "/home/${username}";
-   configFiles = ["/home/${username}/.config/DankMaterialShell/settings.json"];
+    enable = true;
+    compositor = { name = "niri"; };
+    configHome = "/home/${username}";
+    configFiles = [ "/home/${username}/.config/DankMaterialShell/settings.json" ];
   };
 
- ######### System Configurations ###########
+  ######### System Configurations #################
 
-  # Nvim on Root
+  # Nvim config for root
   environment.etc."xdg/nvim/init.lua".text = ''
-  vim.opt.number = true
-  vim.opt.relativenumber = true
-  vim.opt.cursorline = true
-  vim.opt.tabstop = 2
-  vim.opt.shiftwidth = 2
-  vim.opt.expandtab = true
+    vim.opt.number = true
+    vim.opt.relativenumber = true
+    vim.opt.cursorline = true
+    vim.opt.tabstop = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.expandtab = true
   '';
 
-  # Eza Aliases
+  # Shell Aliases
   environment.shellAliases = {
-     ls = "eza --icons";
-     ll = "eza -l --icons";
-     la = "eza -a --icons";
-     lla = "eza -la --icons";
+    ls  = "eza --icons";
+    ll  = "eza -l --icons";
+    la  = "eza -a --icons";
+    lla = "eza -la --icons";
   };
 
   # Screenshare Portals
@@ -233,29 +202,24 @@
   # Automatic Store Optimization
   nix.settings.auto-optimise-store = true;
   nix.gc = {
-  automatic = true;
-  dates = "weekly";
-  persistent = true;
-  options = "--delete-older-than 7d";
+    automatic = true;
+    dates = "weekly";
+    persistent = true;
+    options = "--delete-older-than 7d";
   };
 
- ########### Hardware Configurations ############
- 
- # Logitech Steering Wheel Drivers
- hardware.new-lg4ff.enable = true;
- services.udev.packages = with pkgs; [
-   oversteer
-  ];
+  ########### Hardware Configurations #################
 
- ########### Networking Configuration ###########
+  hardware.new-lg4ff.enable = true;
+  services.udev.packages = with pkgs; [ oversteer ];
 
- # Preserve SSH_AUTH_SOCK in sudo
- security.sudo.extraConfig = ''
-   Defaults env_keep+=SSH_AUTH_SOCK
-   Defaults env_keep+=HOME
- '';
+  ########### Networking Configuration #################
 
- # Enable Spotify Connect
- networking.firewall.allowedTCPPorts = [ 57621 ];
- networking.firewall.allowedUDPPorts = [ 5353 ];
+  security.sudo.extraConfig = ''
+    Defaults env_keep+=SSH_AUTH_SOCK
+    Defaults env_keep+=HOME
+  '';
+
+  networking.firewall.allowedTCPPorts = [ 57621 ];
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 }
