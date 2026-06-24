@@ -20,8 +20,8 @@
   };
   Install = {
     WantedBy = [ "graphical-session.target" ];
+    };
   };
-};
   
   # Niri (DMS manages its own dms/ subdirectory)
   home.file.".config/niri/config.kdl".text = ''
@@ -276,6 +276,51 @@
         };
       };
     };
+
+  # Neovim Setup
+  programs.neovim = {
+  enable = true;
+  defaultEditor = true;
+  viAlias = true;
+  vimAlias = true;
+  plugins = with pkgs.vimPlugins; [
+    nvim-web-devicons
+    nvim-tree-lua
+    nvim-autopairs
+    nvim-treesitter
+    gitsigns-nvim
+  ];
+  initLua = ''
+    vim.opt.number = true
+    vim.opt.relativenumber = false
+    vim.opt.termguicolors = false
+
+    -- Remove tildes
+    vim.opt.fillchars = { eob = " " }
+
+    -- Auto pairs
+    require("nvim-autopairs").setup()
+
+    -- Git signs
+    require("gitsigns").setup()
+
+    -- Clear search highlight on escape
+    vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+    -- Remember cursor position
+    vim.api.nvim_create_autocmd("BufReadPost", { callback = function()
+      local mark = vim.api.nvim_buf_get_mark(0, '"')
+      if mark[1] > 1 and mark[1] <= vim.api.nvim_buf_line_count(0) then
+        vim.api.nvim_win_set_cursor(0, mark)
+      end
+    end })
+
+    require("nvim-tree").setup({ view = { width = 30 } })
+    vim.api.nvim_create_autocmd("VimEnter", { callback = function()
+      require("nvim-tree.api").tree.open()
+    end })
+  '';
+  };  
 
   # Aerofyl Fetch
   home.file.".config/fetch/config".text = ''

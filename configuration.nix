@@ -129,7 +129,7 @@
   (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default)
 
   # System Critical Packages
-  vim-full
+  neovim
   eza
   git
   alacritty
@@ -174,6 +174,7 @@
   # Fish Shell
   programs.fish.enable = true;
 
+  
   # Steam Configuration
   programs.steam = {
     enable = true;
@@ -203,6 +204,16 @@
   };
 
  ######### System Configurations ###########
+
+  # Nvim on Root
+  environment.etc."xdg/nvim/init.lua".text = ''
+  vim.opt.number = true
+  vim.opt.relativenumber = true
+  vim.opt.cursorline = true
+  vim.opt.tabstop = 2
+  vim.opt.shiftwidth = 2
+  vim.opt.expandtab = true
+  '';
 
   # Eza Aliases
   environment.shellAliases = {
@@ -241,6 +252,7 @@
  # Preserve SSH_AUTH_SOCK in sudo
  security.sudo.extraConfig = ''
    Defaults env_keep+=SSH_AUTH_SOCK
+   Defaults env_keep+=HOME
  '';
 
  # Enable Spotify Connect

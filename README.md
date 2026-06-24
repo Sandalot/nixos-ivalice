@@ -35,6 +35,10 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
 - [Eza](https://github.com/eza-community/eza) with icon aliases
 - Fastfetch + [Areofyl](https://github.com/areofyl/fetch) animated fetch on terminal open
 
+**Editor**
+- Neovim with terminal color theming
+- Basic Neovim plugin setup (see home.nix for more details)
+
 **Apps**
 - [Materialgram](https://github.com/kukuruzka165/materialgram) (Fork of telegram)
 - [Equibop](https://github.com/Equicord/Equibop) (Fork of vesktop)
