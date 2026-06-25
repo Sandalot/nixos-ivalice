@@ -1,11 +1,9 @@
 { config, pkgs, inputs, username, ... }:
 {
-  ################# System Version #################
-
+  # System Version
   system.stateVersion = "26.05";
 
   ################ Imports #################
-
   imports = [
     ./hardware-configuration.nix
     ./system-modules/desktop.nix
@@ -14,19 +12,16 @@
   ];
 
   ############### Modules ################
-
   modules.desktop.enable = true;
   modules.gaming.enable = true;
   modules.hardware.enable = true;
 
   ################ Bootloader #################
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [ "nowatchdog" ];
 
   ########## System Definitions #################
-
   networking.hostName = "Ivalice";
   networking.networkmanager.enable = true;
 
@@ -56,19 +51,16 @@
     shell = pkgs.fish;
   };
 
-  ############ Unfree Packages and Experimental Features #################
-
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   ############# Packages #################
-
   environment.systemPackages = with pkgs; [
 
     # Zen Browser Flake
     (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default)
 
-    # Core Package
+    # Core Packages
     eza
     git
     alacritty
@@ -106,7 +98,6 @@
   ];
 
   ############# Configurations #################
-
   # Fish Shell
   programs.fish.enable = true;
 
@@ -114,8 +105,6 @@
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
-
-  ######### System Configurations #################
 
   # Nvim config for root
   environment.etc."xdg/nvim/init.lua".text = ''
@@ -145,12 +134,12 @@
   };
 
   ########### Networking Configuration #################
-
   security.sudo.extraConfig = ''
     Defaults env_keep+=SSH_AUTH_SOCK
     Defaults env_keep+=HOME
   '';
-
+  
+  # Spotify Connect
   networking.firewall.allowedTCPPorts = [ 57621 ];
   networking.firewall.allowedUDPPorts = [ 5353 ];
 }
