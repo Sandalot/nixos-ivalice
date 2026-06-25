@@ -8,46 +8,9 @@
 
   imports = [
     ./hardware-configuration.nix
-  ];
-
-  ################ Drive Mounts #################
-
-  # Drive 1 Mount
-  fileSystems."/mnt/Marche" = {
-    device = "/dev/disk/by-uuid/1720a584-66b6-4fa3-beca-1c977ba37f1f";
-    fsType = "ext4";
-    options = [ "defaults" "nofail" "x-gvfs-show" ];
-  };
-
-  # Drive 2 Mount
-  fileSystems."/mnt/Ritz" = {
-    device = "/dev/disk/by-uuid/40170e14-94ff-44f5-a5c7-5fda8af305c5";
-    fsType = "ext4";
-    options = [ "defaults" "nofail" "x-gvfs-show" ];
-  };
-
-  ################# Display Configuration #################
-
-  # Window Manager
-  programs.niri.enable = true;
-
-  # DMS Shell Configuration
-  programs.dms-shell = {
-    enable = true;
-    systemd = {
-      enable = true;
-      restartIfChanged = true;
-    };
-    enableSystemMonitoring = true;
-    enableDynamicTheming = true;
-  };
-
-  # Font Packages
-  fonts.packages = with pkgs; [
-    nerd-fonts.fira-code
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.symbols-only
-    nerd-fonts.iosevka
+    ./system-modules/desktop.nix
+    ./system-modules/gaming.nix
+    ./system-modules/hardware.nix
   ];
 
   ################ Bootloader #################
@@ -80,8 +43,6 @@
     layout = "us";
     variant = "";
   };
-
-  services.gvfs.enable = true;
 
   users.users.${username} = {
     isNormalUser = true;
@@ -138,9 +99,6 @@
     equibop
     materialgram
     spotify
-
-    # Hardware Packages
-    oversteer
   ];
 
   ############# Configurations #################
@@ -148,29 +106,10 @@
   # Fish Shell
   programs.fish.enable = true;
 
-  # Steam
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    localNetworkGameTransfers.openFirewall = true;
-  };
-  programs.steam.gamescopeSession.enable = true;
-  programs.gamemode.enable = true;
-
   # Whitelist Electron needed by Equibop
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
   ];
-
-  ######### Display Manager #################
-
-  services.displayManager.dms-greeter = {
-    enable = true;
-    compositor = { name = "niri"; };
-    configHome = "/home/${username}";
-    configFiles = [ "/home/${username}/.config/DankMaterialShell/settings.json" ];
-  };
 
   ######### System Configurations #################
 
@@ -192,13 +131,6 @@
     lla = "eza -la --icons";
   };
 
-  # Screenshare Portals
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
   # Automatic Store Optimization
   nix.settings.auto-optimise-store = true;
   nix.gc = {
@@ -207,11 +139,6 @@
     persistent = true;
     options = "--delete-older-than 7d";
   };
-
-  ########### Hardware Configurations #################
-
-  hardware.new-lg4ff.enable = true;
-  services.udev.packages = with pkgs; [ oversteer ];
 
   ########### Networking Configuration #################
 
