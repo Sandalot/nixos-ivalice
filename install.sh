@@ -5,6 +5,7 @@ REPO="https://github.com/Keiyoko/nixos-ivalice"
 
 # Print a clear recovery message if anything fails mid-install
 trap 'echo ""; echo "ERROR: Installation failed. Your hardware config is at /tmp/hardware-configuration.nix"; echo "To recover: sudo mkdir -p /etc/nixos/system-modules && sudo cp /tmp/hardware-configuration.nix /etc/nixos/system-modules/"' ERR
+
 if [ ! -f /etc/nixos/hardware-configuration.nix ]; then
   echo "ERROR: /etc/nixos/hardware-configuration.nix not found. Are you on an installed NixOS system?"
   exit 1
@@ -19,8 +20,8 @@ sudo rm -rf /etc/nixos
 echo "==> Cloning nixos-ivalice..."
 nix-shell -p git --run "sudo git clone $REPO /etc/nixos" || {
   echo "ERROR: Clone failed. Restoring hardware config..."
-  sudo mkdir -p /etc/nixos
-  sudo mkdir -p /etc/nixos/system-modules && sudo cp /tmp/hardware-configuration.nix /etc/nixos/system-modules/
+  sudo mkdir -p /etc/nixos/system-modules
+  sudo cp /tmp/hardware-configuration.nix /etc/nixos/system-modules/
   exit 1
 }
 
