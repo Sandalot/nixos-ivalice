@@ -6,6 +6,11 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    
+    extraPackages = with pkgs; [
+      wl-clipboard
+    ];
+
     plugins = with pkgs.vimPlugins; [
       nvim-web-devicons
       nvim-tree-lua
@@ -13,11 +18,13 @@
       nvim-treesitter
       gitsigns-nvim
     ];
+
     initLua = ''
       vim.opt.number = true
       vim.opt.relativenumber = false
       vim.opt.termguicolors = false
       vim.opt.fillchars = { eob = " " }
+      vim.opt.clipboard = "unnamedplus"
 
       require("nvim-autopairs").setup()
       require("gitsigns").setup()

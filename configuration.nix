@@ -67,7 +67,6 @@
     nautilus
     bitwarden-desktop
     xwayland-satellite
-    wl-clipboard
 
     # Animated Fetch
     fastfetch
