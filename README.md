@@ -17,9 +17,21 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
 3. Change your wallpaper in DMS settings to trigger matugen theming
 
 ## Structure
-- `flake.nix` — inputs and outputs, defines the system configuration
-- `configuration.nix` — system-level config (packages, services, hardware)
-- `home.nix` — user-level dotfiles and app configs managed by Home Manager
+nixos-ivalice/
+├── flake.nix                        # inputs
+├── configuration.nix                # locale, user, packages, nix settings
+├── hardware-configuration.nix       # auto-generated hardware config
+│
+├── system-modules/
+│   ├── desktop.nix                  # niri, dms-shell, dms-greeter, fonts, xdg portal
+│   ├── gaming.nix                   # steam, gamescope, gamemode
+│   └── hardware.nix                 # drive mounts, lg4ff, oversteer
+│
+└── home-modules/
+    ├── home.nix                     # home manager entrypoint
+    ├── compositor.nix               # niri config + dms first install service
+    ├── terminal.nix                 # fish, starship, alacritty, fetch
+    └── editor.nix                   # neovim
 
 ## Features
 **Desktop**

@@ -26,7 +26,7 @@ nix-shell -p git --run "sudo git clone $REPO /etc/nixos" || {
 }
 
 echo "==> Verifying clone..."
-for f in flake.nix configuration.nix home.nix; do
+for f in flake.nix configuration.nix home-modules/home.nix system-modules/desktop.nix; do
   [ -f "/etc/nixos/$f" ] || { echo "ERROR: Expected /etc/nixos/$f not found after clone."; exit 1; }
 done
 
@@ -45,7 +45,7 @@ if [ -f "$0" ] && [ "$0" != "bash" ]; then
 fi
 
 echo ""
-echo "Done! Remember to update drive UUIDs in configuration.nix after booting."
+echo "Done! Remember to update drive UUIDs in system-modules/hardware.nix after booting."
 echo "After boot, 'dms setup' should run automatically."
 echo ""
 read -p "Reboot now? [y/N] " confirm
