@@ -13,6 +13,12 @@
     ./system-modules/hardware.nix
   ];
 
+  ############### Modules ################
+
+  modules.desktop.enable = true;
+  modules.gaming.enable = true;
+  modules.hardware.enable = true;
+
   ################ Bootloader #################
 
   boot.loader.systemd-boot.enable = true;

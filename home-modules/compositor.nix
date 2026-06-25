@@ -1,5 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
+  options.modules.compositor.enable = lib.mkEnableOption "compositor";
+
+  config = lib.mkIf config.modules.compositor.enable {
+
   # DMS First Boot Service
   systemd.user.services.dms-first-boot = {
     Unit = {
@@ -187,4 +191,5 @@
     include "dms/outputs.kdl"
     include "dms/cursor.kdl"
   '';
+  };
 }
