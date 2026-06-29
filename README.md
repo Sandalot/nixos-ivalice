@@ -59,9 +59,9 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
 - Spotify with Remote support
 
 **Media Apps**
-- OBS Studio
-- MPV
-- IMV
+- [OBS Studio](https://github.com/obsproject/obs-studio)
+- [MPV](https://mpv.io/)
+- [IMV](https://sr.ht/~exec/imv/)
 
 **Gaming**
 - Steam with Remote Play, Dedicated Server, and Local Network Transfer support

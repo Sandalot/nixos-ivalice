@@ -137,6 +137,22 @@
         }
     }
     window-rule {
+        match app-id="imv"
+        open-floating true
+        opacity 0.8
+        background-effect {
+            blur true
+        }
+    }
+    window-rule {
+        match app-id="mpv"
+        open-floating true
+        opacity 0.95
+        background-effect {
+            blur true
+        }
+    }
+    window-rule {
         match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
         default-floating-position x=10 y=10 relative-to="bottom-right"
         open-focused false
