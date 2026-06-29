@@ -32,7 +32,8 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
     ├── home.nix                     # home manager entrypoint
     ├── compositor.nix               # niri config + dms first install service
     ├── terminal.nix                 # fish, starship, alacritty, fetch
-    └── editor.nix                   # neovim
+    ├── editor.nix                   # neovim
+    └── media.nix                    # mpv, imv
 ```
 
 ## Features
