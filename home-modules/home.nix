@@ -4,10 +4,12 @@
     ./compositor.nix
     ./terminal.nix
     ./editor.nix
+    ./media.nix
   ];
 
   # Modules
   modules.compositor.enable = true;
+  modules.media.enable = true;
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
