@@ -162,6 +162,13 @@
         }
     }
     window-rule {
+    match app-id="zen"
+    opacity 0.85
+    background-effect {
+        blur true
+      }
+    }
+    window-rule {
         match app-id="Alacritty"
         match app-id="zen"
         draw-border-with-background false
