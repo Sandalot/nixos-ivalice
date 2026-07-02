@@ -76,6 +76,14 @@
           background-effect {
               blur true
           }
+          popups {
+              geometry-corner-radius 10
+              opacity 0.8
+              background-effect {
+                  blur true
+                  xray false
+              }
+          }
       }
 
       // Zen Browser
@@ -143,9 +151,13 @@
       window-rule {
           match app-id=r#"(org\.quickshell|com\.danklinux\.dms)$"#
           open-floating true
+          opacity 0.8
+          background-effect {
+             blur true
+          }
       }
 
-      // --- Layers & Extras ---
+     // --- Layers & Extras ---
       layer-rule {
           match namespace="^quickshell$"
           place-within-backdrop true
@@ -158,6 +170,7 @@
           }
       }
 
+      // Alt + Tab Binds
       recent-windows {
           binds {
               Alt+Tab { next-window scope="output"; }
