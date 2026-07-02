@@ -3,8 +3,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
     zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:0xc000022070/zen-browser-flake";
     };
     areofyl-fetch = {
       url = "github:areofyl/fetch";

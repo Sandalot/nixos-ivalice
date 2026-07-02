@@ -137,6 +137,18 @@
         }
     }
     window-rule {
+        match app-id="zen"
+        match app-id="zen-beta"
+        match app-id="zen-alpha"
+        geometry-corner-radius 12
+        clip-to-geometry true
+        draw-border-with-background false
+        opacity 0.9
+        background-effect {
+            blur true
+        }
+    }
+    window-rule {
         match app-id="imv"
         open-floating true
         geometry-corner-radius 12
@@ -174,7 +186,15 @@
         blur true
         }
     }
-
+    window-rule {
+        match app-id="^zen"
+        match app-id="^zen-alpha"
+        match app-id="^zen-beta"
+        geometry-corner-radius 12
+        background-effect {
+        blur true
+        }
+    }
     window-rule {
         match app-id=r#"^steam$"#
         geometry-corner-radius 12
@@ -188,10 +208,6 @@
     match app-id="zen"
     geometry-corner-radius 12
     clip-to-geometry true
-    opacity 0.9
-    background-effect {
-        blur true
-      }
     }
     window-rule {
         match app-id="Alacritty"

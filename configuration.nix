@@ -57,9 +57,6 @@
   ############# Packages #################
   environment.systemPackages = with pkgs; [
 
-    # Zen Browser Flake
-    (inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default)
-
     # Core Packages
     eza
     git
@@ -134,6 +131,9 @@
     persistent = true;
     options = "--delete-older-than 7d";
   };
+
+  # Enable Home Manager system-level variables
+  home-manager.extraSpecialArgs = { inherit inputs username; };
 
   ########### Networking Configuration #################
   security.sudo.extraConfig = ''
