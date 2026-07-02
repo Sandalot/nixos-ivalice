@@ -57,8 +57,14 @@
       prefer-no-csd
       screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+      // Disable the large drop shadows on workspaces in the overview
+      overview {
+          workspace-shadow {
+              off
+          }
+      }
+
       // --- Window Rules ---
-      
       // General GNOME / Portal transparency & radius
       window-rule {
           match app-id=r#"^org\.gnome\."#
