@@ -34,7 +34,7 @@ curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.
     ├── terminal.nix                 # fish, starship, alacritty, fetch
     ├── editor.nix                   # neovim
     ├── media.nix                    # mpv, imv
-    └── browser.nix                  # <-- NEW: Zen Browser config
+    └── browser.nix                  # Zen Browser config
 ```
 
 ## Features
