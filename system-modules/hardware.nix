@@ -22,10 +22,19 @@
     boot.kernelModules = [ "hid-logitech-new" ];
 
     # Udev Rules & System Packages
-    services.udev.packages = with pkgs; [ oversteer ];
+    services.udev.packages = with pkgs; [ 
+      oversteer
+      vial
+    ];
     
     environment.systemPackages = with pkgs; [ 
       oversteer
+      vial
     ];
+   
+    # Detect my personal custom keyboard
+    services.udev.extraRules = ''
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="aa96", ATTRS{idProduct}=="aaaf", MODE="0660", GROUP="users", TAG+="uaccess"
+  '';
   };
 }
