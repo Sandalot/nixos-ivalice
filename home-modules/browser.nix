@@ -30,6 +30,12 @@ in
           "font.name.serif.x-western" = "Iosevka Nerd Font";
           "font.name.sans-serif.x-western" = "Iosevka Nerd Font";
           "font.name.monospace.x-western" = "Iosevka Nerd Font";
+
+          # Open to Glance on Startup
+          "browser.startup.homepage" = "http://glance.home.lab";
+          "browser.startup.page" = 1;
+          "browser.newtab.url" = "http://glance.home.lab";
+          "browser.newtabpage.enabled" = false;
         };
       };
 
