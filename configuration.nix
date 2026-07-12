@@ -57,6 +57,11 @@
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+   # Caddy Cert for Homelab
+   security.pki.certificateFiles = [
+     /etc/nixos/certs/caddy-local-ca.crt
+  ];
+
   ############# Packages #################
   environment.systemPackages = with pkgs; [
 
