@@ -59,7 +59,7 @@
 
    # Caddy Cert for Homelab
    security.pki.certificateFiles = [
-     /etc/nixos/certs/caddy-local-ca.crt
+     ./certs/caddy-local-ca.crt
   ];
 
   ############# Packages #################
