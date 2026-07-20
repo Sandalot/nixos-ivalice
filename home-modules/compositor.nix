@@ -4,21 +4,6 @@
   options.modules.compositor.enable = lib.mkEnableOption "compositor";
 
   config = lib.mkIf config.modules.compositor.enable {
-    
-    # DMS First Boot Service
-    systemd.user.services.dms-first-boot = {
-      Unit = {
-        Description = "DMS first boot setup";
-        After = [ "graphical-session.target" ];
-        ConditionPathExists = "!%h/.config/DankMaterialShell/settings.json";
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.dms-shell}/bin/dms setup";
-        RemainAfterExit = true;
-      };
-      Install = { WantedBy = [ "graphical-session.target" ]; };
-    };
 
     # Niri Config
     home.file.".config/niri/config.kdl".text = ''

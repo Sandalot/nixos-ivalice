@@ -2,17 +2,22 @@
 {
   imports = [
     inputs.zen-browser.homeModules.beta
+    inputs.dms.homeModules.dank-material-shell
     ./compositor.nix
     ./terminal.nix
-    ./editor.nix
+    ./neovim.nix
     ./media.nix
     ./browser.nix
+    ./dank-shell.nix
   ];
 
   # Modules
   modules.compositor.enable = true;
+  modules.terminal.enable = true;
+  modules.neovim.enable = true;
   modules.media.enable = true;
   modules.browser.zen.enable = true;
+  modules.dms.enable = true;
 
   # Environment Variables
   home.username = username;

@@ -1,9 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 {
   services.syncthing = {
     enable = true;
-    user = "keio";
-    dataDir = "/home/keio";
-    configDir = "/home/keio/.config/syncthing";
+    user = username;
+    dataDir = "/home/${username}";
+    configDir = "/home/${username}/.config/syncthing";
   };
 }

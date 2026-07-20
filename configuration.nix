@@ -9,8 +9,19 @@
     # System Modules
     ./system-modules/hardware-configuration.nix
     ./system-modules/desktop.nix
+    ./system-modules/dms-greeter.nix
     ./system-modules/gaming.nix
     ./system-modules/hardware.nix
+
+    # Core Modules
+    ./system-modules/core/boot.nix
+    ./system-modules/core/locale.nix
+    ./system-modules/core/users.nix
+    ./system-modules/core/nix-settings.nix
+
+    ./system-modules/packages.nix
+    ./system-modules/shell.nix
+    ./system-modules/networking.nix
 
     # Service Modules
     ./service-modules/syncthing.nix
@@ -19,144 +30,7 @@
 
   ############### Modules ################
   modules.desktop.enable = true;
+  modules.dms-greeter.enable = true;
   modules.gaming.enable = true;
   modules.hardware.enable = true;
-
-  ################ Bootloader #################
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "nowatchdog" ];
-
-  ########## System Definitions #################
-  networking.hostName = "Ivalice";
-  networking.networkmanager.enable = true;
-
-  time.timeZone = "Asia/Singapore";
-
-  i18n.defaultLocale = "en_SG.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_SG.UTF-8";
-    LC_MEASUREMENT = "en_SG.UTF-8";
-    LC_MONETARY = "fil_PH";
-    LC_NAME = "en_SG.UTF-8";
-    LC_NUMERIC = "en_SG.UTF-8";
-    LC_PAPER = "en_SG.UTF-8";
-    LC_TELEPHONE = "fil_PH";
-    LC_TIME = "en_SG.UTF-8";
-  };
-
-  services.xserver.xkb = {
-    layout = "us";
-    
-    # Swap capslock and escape
-    options = "caps:swapescape";
-  };
-
-  users.users.${username} = {
-    isNormalUser = true;
-    description = username;
-    extraGroups = [ "networkmanager" "wheel" ];
-    shell = pkgs.fish;
-  };
-
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-   # Caddy Cert for Homelab
-   security.pki.certificateFiles = [
-     ./certs/caddy-local-ca.crt
-  ];
-
-  ############# Packages #################
-  environment.systemPackages = with pkgs; [
-
-    # Core Packages
-    eza
-    git
-    kitty
-    nautilus
-    bitwarden-desktop
-    xwayland-satellite
-    pciutils
-
-    # Animated Fetch
-    fastfetch
-    (stdenv.mkDerivation {
-      pname = "areofyl-fetch";
-      version = "unstable";
-      src = inputs.areofyl-fetch;
-      nativeBuildInputs = [ gcc ];
-      buildPhase = ''
-        sed -i 's/#define ANIM_WIDTH 60/#define ANIM_WIDTH 45/' fetch.c
-        sed -i 's/#define GAP 2/#define GAP 1/' fetch.c
-        sed -i '/\/\/ lspci gave us a human name\./a\  if (!strcmp(pci_id, "1002:7550")) strcpy(name, "Radeon RX 9070 XT");' fetch.c
-        cc -O2 -o fetch fetch.c -lm
-        cc -O2 -o fetch fetch.c -lm
-      '';
-      installPhase = "install -Dm755 fetch $out/bin/fetch";
-    })
-
-    # Audio Packages
-    qpwgraph
-    pavucontrol
-
-    # Icon Packages
-    quintom-cursor-theme
-
-    # Other Packages
-    equibop
-    materialgram
-    spotify
-  ];
-
-  ############# Configurations #################
-  # Fish Shell
-  programs.fish.enable = true;
-
-  # Whitelist Electron needed by Equibop
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-39.8.10"
-  ];
-
-  # Nvim config for root
-  environment.etc."xdg/nvim/init.lua".text = ''
-    vim.opt.number = true
-    vim.opt.relativenumber = true
-    vim.opt.cursorline = true
-    vim.opt.tabstop = 2
-    vim.opt.shiftwidth = 2
-    vim.opt.expandtab = true
-  '';
-
-  # Shell Aliases
-  environment.shellAliases = {
-    ls  = "eza --icons";
-    ll  = "eza -l --icons";
-    la  = "eza -a --icons";
-    lla = "eza -la --icons";
-  };
-
-  # Automatic Store Optimization
-  nix.settings.auto-optimise-store = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    persistent = true;
-    options = "--delete-older-than 7d";
-  };
-
-  # Enable Home Manager system-level variables
-  home-manager.extraSpecialArgs = { inherit inputs username; };
-
-  ########### Networking Configuration #################
-  security.sudo.extraConfig = ''
-    Defaults env_keep+=SSH_AUTH_SOCK
-    Defaults env_keep+=HOME
-    Defaults env_keep += "WAYLAND_DISPLAY XDG_RUNTIME_DIR"
-  '';
-  
-  # Spotify Connect
-  networking.firewall.allowedTCPPorts = [ 57621 ];
-  networking.firewall.allowedUDPPorts = [ 5353 ];
 }

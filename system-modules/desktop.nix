@@ -1,4 +1,4 @@
-{ config, pkgs, lib, username, ... }:
+{ config, pkgs, lib, ... }:
 {
   options.modules.desktop.enable = lib.mkEnableOption "desktop";
 
@@ -6,25 +6,6 @@
 
     # Window Manager
     programs.niri.enable = true;
-
-    # DMS Shell (Clean state)
-    programs.dms-shell = {
-      enable = true;
-      systemd = {
-        enable = true;
-        restartIfChanged = true;
-      };
-      enableSystemMonitoring = true;
-      enableDynamicTheming = true;
-    };
-
-    # Display Manager
-    services.displayManager.dms-greeter = {
-      enable = true;
-      compositor = { name = "niri"; };
-      configHome = "/home/${username}";
-      configFiles = [ "/home/${username}/.config/DankMaterialShell/settings.json" ];
-    };
 
     # Fonts
     fonts.packages = with pkgs; [
