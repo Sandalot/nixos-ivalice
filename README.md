@@ -2,6 +2,8 @@
 
 Keio's NixOS flake config for host machine: Ivalice
 
+## Setup
+
 > Drive mounts in `system-modules/hardware.nix` use personal UUIDs — update or remove before rebuilding (`lsblk -f` or `blkid`).
 
 ## Structure
