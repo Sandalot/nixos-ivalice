@@ -2,12 +2,6 @@
 
 Keio's NixOS flake config for host machine: Ivalice
 
-## Setup
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Keiyoko/nixos-ivalice/main/install.sh | bash
-```
-
 > Drive mounts in `system-modules/hardware.nix` use personal UUIDs — update or remove before rebuilding (`lsblk -f` or `blkid`).
 
 ## Structure
